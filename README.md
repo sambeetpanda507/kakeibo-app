@@ -1,50 +1,106 @@
-# Welcome to your Expo app 👋
+# Kakeibo App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Expo Router app for building Kakeibo onboarding and auth flows.
 
-## Get started
+## Stack
 
-1. Install dependencies
+- Expo
+- Expo Router
+- React Native
+- TypeScript
 
-   ```bash
-   npm install
-   ```
+## Run
 
-2. Start the app
-
-   ```bash
-   npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+1. Install deps:
 
 ```bash
-npm run reset-project
+npm install
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+2. Start dev server:
 
-## Learn more
+```bash
+npx expo start
+```
 
-To learn more about developing your project with Expo, look at the following resources:
+Useful targets:
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+```bash
+npm run android
+npm run ios
+npm run web
+```
 
-## Join the community
+## Project Structure
 
-Join our community of developers creating universal apps.
+```text
+app/
+  _layout.tsx
+  index.tsx
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+assets/
+  fonts/
+  images/
+
+hooks/
+  use-theme.ts
+
+theme/
+  colors/
+    light.ts
+    dark.ts
+  index.ts
+  typography.ts
+  types.ts
+```
+
+## Routing
+
+This project uses Expo Router file-based routing.
+
+- `app/index.tsx` -> home screen
+- `app/_layout.tsx` -> shared stack layout
+
+## Theme
+
+Theme setup currently focuses on light/dark color tokens.
+
+- `theme/colors/light.ts` -> light mode colors
+- `theme/colors/dark.ts` -> dark mode colors
+- `theme/index.ts` -> theme exports
+- `hooks/use-theme.ts` -> returns active color theme
+- `theme/typography.ts` -> shared font size and line-height tokens
+
+## Fonts
+
+Custom fonts live in `assets/fonts/` and should be loaded from `app/_layout.tsx` with `expo-font`.
+
+Current font files:
+
+- `Nunito-VariableFont_wght.ttf`
+- `Nunito-Italic-VariableFont_wght.ttf`
+
+## SVG
+
+SVG support uses:
+
+- `react-native-svg`
+- `react-native-svg-transformer`
+
+`metro.config.js` is configured so local `.svg` files can be imported as components.
+
+Example:
+
+```tsx
+import HeroImg from "@/assets/images/hero.svg";
+```
+
+## Notes
+
+- Restart Expo with cache clear after Metro config changes:
+
+```bash
+npx expo start --clear
+```
+
+- If adding new color tokens, keep keys aligned between `light.ts` and `dark.ts`.
