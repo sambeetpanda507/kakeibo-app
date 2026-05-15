@@ -8,7 +8,7 @@ export default function Index() {
   const theme = useTheme();
 
   const handleLoginPress = () => {
-    router.push("/login");
+    router.push("/(auth)/login");
   };
 
   return (
