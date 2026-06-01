@@ -1,8 +1,9 @@
 import HeroImg from "@/assets/images/hero.svg";
+import Button from "@/components/ui/Button";
 import useTheme from "@/hooks/use-theme";
 import { typography } from "@/theme/typography";
 import { router } from "expo-router";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
 export default function Index() {
   const theme = useTheme();
@@ -26,12 +27,12 @@ export default function Index() {
       <Text style={[styles.message, { color: theme.text }]}>manage your money with</Text>
       <Text style={[styles.message, { color: theme.text }]}>purpose and clarity</Text>
 
-      <Pressable style={[styles.capsuleButton, { backgroundColor: theme.primary }]}>
-        <Text style={[styles.message, styles.getStarted]}>Get Started</Text>
-      </Pressable>
-      <Pressable onPress={handleLoginPress}>
-        <Text style={[styles.message, { color: theme.primary, marginTop: 10 }]}>Login</Text>
-      </Pressable>
+      <Button fullWidth style={styles.primaryButton}>
+        Get Started
+      </Button>
+      <Button variant="ghost" fullWidth onPress={handleLoginPress} style={styles.secondaryButton} textStyle={styles.secondaryLabel}>
+        Login
+      </Button>
     </View>
   );
 }
@@ -44,29 +45,28 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 50,
-    fontFamily: "Nunito",
-    fontWeight: 700,
+    fontWeight: "700",
   },
   message: {
     fontSize: typography.fontSize.md,
     lineHeight: typography.lineHeight.md,
-    fontWeight: 400,
+    fontWeight: "400",
   },
   heroWrapper: {
     width: "100%",
     maxWidth: 320,
     aspectRatio: 1,
   },
-  capsuleButton: {
-    borderRadius: 50,
-    padding: 10,
+  primaryButton: {
     width: 300,
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
     marginTop: 30,
   },
-  getStarted: {
-    color: "white",
+  secondaryButton: {
+    marginTop: 10,
+  },
+  secondaryLabel: {
+    fontSize: typography.fontSize.md,
+    lineHeight: typography.lineHeight.md,
+    fontWeight: "400",
   },
 });
