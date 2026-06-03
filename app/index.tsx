@@ -12,6 +12,10 @@ export default function Index() {
     router.push("/(auth)/login");
   };
 
+  const handleGetStartedPress = () => {
+    router.push("/(auth)/signup");
+  };
+
   return (
     <View style={[styles.container, { backgroundColor: theme.background }]}>
       <Text style={[styles.title, { color: theme.primary }]}>Kakeibo</Text>
@@ -27,7 +31,7 @@ export default function Index() {
       <Text style={[styles.message, { color: theme.text }]}>manage your money with</Text>
       <Text style={[styles.message, { color: theme.text }]}>purpose and clarity</Text>
 
-      <Button fullWidth style={styles.primaryButton}>
+      <Button fullWidth style={styles.primaryButton} onPress={handleGetStartedPress}>
         Get Started
       </Button>
       <Button variant="ghost" fullWidth onPress={handleLoginPress} style={styles.secondaryButton} textStyle={styles.secondaryLabel}>

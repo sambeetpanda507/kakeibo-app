@@ -111,7 +111,7 @@ export default function Login() {
 
         <View style={styles.signupRow}>
           <AppText style={[styles.signupText, { color: theme.text }]}>Don&apos;t have an account?</AppText>
-          <Pressable>
+          <Pressable onPress={() => router.push("/(auth)/signup")}>
             <AppText style={[styles.signupLink, { color: theme.primary }]}>Sign Up</AppText>
           </Pressable>
         </View>
