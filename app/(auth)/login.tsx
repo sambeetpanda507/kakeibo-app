@@ -6,9 +6,10 @@ import Google from "@/assets/icons/google";
 import Lock from "@/assets/icons/lock";
 import Button from "@/components/ui/Button";
 import AppText from "@/components/ui/app-text";
+import { useAuthStore } from "@/store/authStore";
 import { router } from "expo-router";
 import { useState } from "react";
-import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
+import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
 import useTheme from "../../hooks/use-theme";
 import { typography } from "../../theme/typography";
 
@@ -17,6 +18,8 @@ export default function Login() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
+  const { setIsAuth, isLoading, setIsLoading } = useAuthStore();
 
   const handleShowVisible = () => {
     setShowPassword((prev) => !prev);
@@ -24,6 +27,46 @@ export default function Login() {
 
   const handleBack = () => {
     router.back();
+  };
+
+  const handleEmailChange = (value: string) => {
+    setEmail(value);
+    setErrors((prev) => ({ ...prev, email: undefined }));
+  };
+
+  const handlePasswordChange = (value: string) => {
+    setPassword(value);
+    setErrors((prev) => ({ ...prev, password: undefined }));
+  };
+
+  const handleLogin = () => {
+    const nextErrors: { email?: string; password?: string } = {};
+    const normalizedEmail = email.trim();
+
+    if (!normalizedEmail) {
+      nextErrors.email = "Email is required";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalizedEmail)) {
+      nextErrors.email = "Enter a valid email address";
+    }
+
+    if (!password) {
+      nextErrors.password = "Password is required";
+    } else if (password.length < 8) {
+      nextErrors.password = "Password must be at least 8 characters";
+    }
+
+    setErrors(nextErrors);
+
+    if (Object.keys(nextErrors).length > 0) {
+      return;
+    }
+
+    // TODO: Implement api to login
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsAuth(true);
+      setIsLoading(false);
+    }, 1000);
   };
 
   return (
@@ -42,7 +85,7 @@ export default function Login() {
         {/* --- Text area --- */}
         <View>
           {/* --- Email --- */}
-          <View style={[styles.input, { borderColor: theme.text }]}>
+          <View style={[styles.input, { borderColor: errors.email ? theme.danger : theme.text }]}>
             <Envolope height={18} width={18} color={theme.text} />
             <TextInput
               style={[styles.textInput, { color: theme.text }]}
@@ -50,12 +93,13 @@ export default function Login() {
               placeholder="Email"
               placeholderTextColor={theme.text}
               value={email}
-              onChangeText={setEmail}
+              onChangeText={handleEmailChange}
             />
           </View>
+          {errors.email ? <Text style={[styles.errorText, { color: theme.danger }]}>{errors.email}</Text> : null}
 
           {/* --- Password --- */}
-          <View style={[styles.input, { borderColor: theme.text }]}>
+          <View style={[styles.input, { borderColor: errors.password ? theme.danger : theme.text }]}>
             <Lock height={18} width={18} color={theme.text} />
             <TextInput
               style={[styles.textInput, { color: theme.text }]}
@@ -63,20 +107,21 @@ export default function Login() {
               placeholder="Password"
               placeholderTextColor={theme.text}
               value={password}
-              onChangeText={setPassword}
+              onChangeText={handlePasswordChange}
             />
             <Pressable onPress={handleShowVisible}>
               <Eye height={18} width={18} color={theme.text} />
             </Pressable>
           </View>
+          {errors.password ? <Text style={[styles.errorText, { color: theme.danger }]}>{errors.password}</Text> : null}
         </View>
 
         <View>
           <Text style={[styles.forgotPassword, { color: theme.primary }]}>Forgot password?</Text>
         </View>
 
-        <Button fullWidth style={styles.button} radius="subtle">
-          Login
+        <Button fullWidth style={styles.button} radius="subtle" onPress={handleLogin} disabled={isLoading}>
+          {isLoading ? <ActivityIndicator color="#FFFFFF" /> : "Login"}
         </Button>
 
         <View style={styles.divider}>
@@ -164,6 +209,12 @@ const styles = StyleSheet.create({
   },
   textInput: {
     flex: 1,
+  },
+  errorText: {
+    fontSize: typography.fontSize.sm,
+    lineHeight: typography.lineHeight.sm,
+    marginTop: -4,
+    marginBottom: 6,
   },
   forgotPassword: {
     textAlign: "right",

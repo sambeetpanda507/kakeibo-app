@@ -1,12 +1,18 @@
 import HeroImg from "@/assets/images/hero.svg";
 import Button from "@/components/ui/Button";
 import useTheme from "@/hooks/use-theme";
+import { useAuthStore } from "@/store/authStore";
 import { typography } from "@/theme/typography";
-import { router } from "expo-router";
+import { Redirect, router } from "expo-router";
 import { StyleSheet, Text, View } from "react-native";
 
 export default function Index() {
   const theme = useTheme();
+  const isAuth = useAuthStore((state) => state.isAuth);
+
+  if (isAuth) {
+    return <Redirect href="/(home)/home"></Redirect>;
+  }
 
   const handleLoginPress = () => {
     router.push("/(auth)/login");
